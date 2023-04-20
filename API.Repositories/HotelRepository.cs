@@ -44,15 +44,13 @@ namespace API.Repositories
 
         public bool Insert(Hotel hotel)
         {
-            StringBuilder sb = new();
-            sb.Append(Hotel.INSERT);
-            sb.Replace("@Endereco", _enderecoRepository.InsertEndereco(hotel.Endereco).ToString());
+            string strInsert = $"insert into Hotel (Nome, IdEndereco, DataCadastro, Valor) values (@Nome, {_enderecoRepository.InsertEndereco(hotel.Endereco)}, @DataCadastro, @Valor)";
 
             var db = new SqlConnection(_conn);
 
             db.Open();
 
-            db.Execute(sb.ToString(), hotel);
+            db.Execute(strInsert, hotel);
 
             db.Close();
 

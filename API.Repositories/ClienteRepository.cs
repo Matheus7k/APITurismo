@@ -49,15 +49,13 @@ namespace API.Repositories
 
         public bool Insert(Cliente cliente)
         {
-            StringBuilder sb = new();
-            sb.Append(Cliente.INSERT);
-            sb.Replace("@Endereco", _enderecoRepository.InsertEndereco(cliente.Endereco).ToString());
+            string strInsert = $"insert into Cliente (Nome, Telefone, IdEndereco, DataCadastro) values (@Nome, @Telefone, {_enderecoRepository.InsertEndereco(cliente.Endereco)}, @DataCadastro)";
 
             var db = new SqlConnection(_conn);
 
             db.Open();
 
-            db.Execute(sb.ToString(), cliente);
+            db.Execute(strInsert, cliente);
 
             db.Close();
 

@@ -36,13 +36,11 @@ namespace API.Repositories
 
         public int InsertCidade(Cidade cidade)
         {
-            StringBuilder sb = new();
-            sb.Append(Cidade.INSERT);
-            sb.Append("; select cast(scope_identity() as int)");
+            string strInsert = "insert into Cidade (Descricao, DataCadastro) values (@Descricao, @DataCadastro); select cast(scope_identity() as int)";
 
             var db = new SqlConnection(_conn);
 
-            return (int)db.ExecuteScalar(sb.ToString(), cidade);
+            return (int)db.ExecuteScalar(strInsert, cidade);
         }
 
         public Cidade GetCidadeId(int id)

@@ -68,15 +68,12 @@ namespace API.Repositories
 
         public int InsertEndereco(Endereco endereco)
         {
-            StringBuilder sb = new();
-            sb.Append(Endereco.INSERT);
-            sb.Replace("@Cidade", _cidadeRepository.InsertCidade(endereco.Cidade).ToString());
-            sb.Append("; select cast(scope_identity() as int)");
+            string strInsert = $"insert into Endereco (Logradouro, Numero, Bairro, CEP, Complemento, IdCidade, DataCadastro) values (@Logradouro, @Numero, @Bairro, @CEP, @Complemento, {_cidadeRepository.InsertCidade(endereco.Cidade)}, @DataCadastro); select cast(scope_identity() as int)";
 
 
             var db = new SqlConnection(_conn);
 
-            return (int)db.ExecuteScalar(sb.ToString(), endereco);
+            return (int)db.ExecuteScalar(strInsert, endereco);
         }
 
         public Endereco GetEnderecoId(int id)
