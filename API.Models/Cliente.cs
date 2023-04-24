@@ -9,7 +9,7 @@ namespace Models
     public class Cliente
     {
         public static string INSERT = "insert into Cliente (Nome, Telefone, IdEndereco, DataCadastro) values (@Nome, @Telefone, @Endereco, @DataCadastro)";
-        public static string GETALL = "select Nome, Telefone, IdEndereco, DataCadastro from Cliente";
+        public static string GETALL = "select Id, Nome, Telefone, IdEndereco, DataCadastro from Cliente";
 
         public int Id { get; set; }
         public string Nome { get; set; }

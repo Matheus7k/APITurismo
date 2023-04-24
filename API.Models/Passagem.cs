@@ -8,6 +8,8 @@ namespace Models
 {
     public class Passagem
     {
+        public static string GETALL = "select Id, Origem, Destino, IdCliente, [Data], Valor from Passagem";
+
         public int Id { get; set; }
         public Endereco Origem { get; set; }
         public Endereco Destino { get; set; }
