@@ -11,5 +11,8 @@ namespace API.Repositories.Interfaces
     {
         bool Insert(Endereco endereco);
         List<Endereco> GetAll();
+        int InsertEndereco(Endereco endereco);
+        Endereco GetEnderecoId(int id);
+        void UpdateEndereco(Endereco endereco);
     }
 }

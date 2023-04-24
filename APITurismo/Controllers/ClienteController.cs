@@ -16,19 +16,25 @@ namespace APITurismo.Controllers
             _clicenteService = new ClienteService();
         }
 
+        [HttpPost(Name = "Insert Cliente")]
+        public ActionResult Insert(Cliente cliente)
+        {
+            if (_clicenteService.Insert(cliente))
+                return StatusCode(201);
+            else
+                return BadRequest();
+        }
+
         [HttpGet(Name = "Get Clientes")]
         public List<Cliente> GetAll()
         {
             return _clicenteService.GetAll();
-        }
+        }        
 
-        [HttpPost(Name = "Insert Cliente")]
-        public ActionResult Insert(Cliente cliente)
+        [HttpPatch(Name = "Update Ciiente")]
+        public void UpdateCliente(Cliente cliente)
         {
-            if(_clicenteService.Insert(cliente))
-                return StatusCode(201);
-            else
-                return BadRequest();
+            _clicenteService.UpdateCliente(cliente);
         }
     }
 }

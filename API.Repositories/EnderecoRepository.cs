@@ -5,6 +5,7 @@ using API.Repositories.Interfaces;
 using System.Data;
 using System.Text;
 using System.Runtime.ConstrainedExecution;
+using System.Collections.Generic;
 
 namespace API.Repositories
 {
@@ -15,20 +16,13 @@ namespace API.Repositories
 
         public bool Insert(Endereco endereco)
         {
+            string strInsert = $"insert into Endereco(Logradouro, Numero, Bairro, CEP, Complemento, IdCidade, DataCadastro) " +
+                $"values(@Logradouro, @Numero, @Bairro, @CEP, @Complemento, {_cidadeRepository.InsertCidade(endereco.Cidade)}, @DataCadastro)";
             var db = new SqlConnection(_conn);
 
             db.Open();
 
-            db.Execute(Endereco.INSERT, new
-            {
-                endereco.Logradouro,
-                endereco.Numero,
-                endereco.Bairro,
-                endereco.CEP,
-                endereco.Complemento,
-                IdCidade = _cidadeRepository.InsertCidade(endereco.Cidade),
-                endereco.DataCadastro
-            });
+            db.Execute(strInsert, endereco);
 
             db.Close();
 
@@ -80,9 +74,9 @@ namespace API.Repositories
         {
             var db = new SqlConnection(_conn);
 
-            string strTeste = $"select Id, Logradouro, Numero, Bairro, CEP, Complemento, IdCidade, DataCadastro from Endereco where Id = {id}";
+            string strSelect = $"select Id, Logradouro, Numero, Bairro, CEP, Complemento, IdCidade, DataCadastro from Endereco where Id = {id}";
 
-            IDataReader dr = db.ExecuteReader(strTeste);
+            IDataReader dr = db.ExecuteReader(strSelect);
 
             Endereco endereco = new();
 
@@ -99,6 +93,15 @@ namespace API.Repositories
             }
 
             return endereco;
+        }
+
+        public void UpdateEndereco(Endereco endereco)
+        {
+            string strUpdate = "update Endereco set Logradouro = @Logradouro, Numero = @Numero, Bairro = @Bairro, CEP = @CEP, Complemento = @Complemento where Id = @Id";
+
+            var db = new SqlConnection(_conn);
+
+            db.Execute(strUpdate, endereco);
         }
     }
 }

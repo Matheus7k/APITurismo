@@ -27,5 +27,10 @@ namespace API.Services
         {
             return _enderecoRepository.GetAll();
         }
+
+        public void UpdateEndereco(Endereco endereco)
+        {
+            _enderecoRepository.UpdateEndereco(endereco);
+        }
     }
 }

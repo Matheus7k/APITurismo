@@ -22,5 +22,10 @@ namespace API.Services
         {
             return _cidadeRepository.GetAll();
         }
+
+        public void UpdateCidade(Cidade cidade)
+        {
+            _cidadeRepository.UpdateCidade(cidade);
+        }
     }
 }

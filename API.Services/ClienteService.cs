@@ -27,5 +27,10 @@ namespace API.Services
         {
             return _clienteRepository.GetAll();
         }
+
+        public void UpdateCliente(Cliente cliente)
+        {
+            _clienteRepository.UpdateCliente(cliente);
+        }
     }
 }

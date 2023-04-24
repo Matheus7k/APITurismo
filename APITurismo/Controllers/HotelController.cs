@@ -30,5 +30,11 @@ namespace APITurismo.Controllers
         {
             return _hotelService.GetAll();
         }
+
+        [HttpPatch(Name = "Update Hotel")]
+        public void UpdateHotel(Hotel hotel)
+        {
+            _hotelService.UpdateHotel(hotel);
+        }
     }
 }

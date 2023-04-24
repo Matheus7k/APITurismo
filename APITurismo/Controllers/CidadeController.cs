@@ -30,5 +30,11 @@ namespace APITurismo.Controllers
         {
             return _cidadeService.GetAll();
         }
+
+        [HttpPatch(Name = "Update Cidade")]
+        public void UpdateCidade(Cidade cidade)
+        {
+            _cidadeService.UpdateCidade(cidade);
+        }
     }
 }

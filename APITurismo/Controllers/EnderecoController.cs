@@ -30,5 +30,11 @@ namespace APITurismo.Controllers
         {
             return _enderecoService.GetAll();
         }
+
+        [HttpPatch(Name = "Update Endereco")]
+        public void UpdateEndereco(Endereco endereco)
+        {
+            _enderecoService.UpdateEndereco(endereco);
+        }
     }
 }

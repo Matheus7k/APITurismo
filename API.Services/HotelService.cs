@@ -27,5 +27,10 @@ namespace API.Services
         {
             return _hotelRepository.GetAll();
         }
+
+        public void UpdateHotel(Hotel hotel)
+        {
+            _hotelRepository.UpdateHotel(hotel);
+        }
     }
 }

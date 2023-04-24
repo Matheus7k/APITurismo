@@ -62,5 +62,14 @@ namespace API.Repositories
 
             return cidade;
         }
+
+        public void UpdateCidade(Cidade cidade)
+        {
+            string strUpdate = $"update Cidade set Descricao = @Descricao where Id = @Id";
+
+            var db = new SqlConnection(_conn);
+
+            db.Execute(strUpdate, cidade);
+        }
     }
 }

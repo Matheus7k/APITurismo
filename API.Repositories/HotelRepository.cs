@@ -30,7 +30,7 @@ namespace API.Repositories
             {
                 Hotel hotel = new();
 
-                hotel.Id = 0;
+                hotel.Id = (int)dr["Id"];
                 hotel.Nome = (string)dr["Nome"];
                 hotel.Endereco = _enderecoRepository.GetEnderecoId((int)dr["IdEndereco"]);
                 hotel.DataCadastro = (DateTime)dr["DataCadastro"];
@@ -55,6 +55,47 @@ namespace API.Repositories
             db.Close();
 
             return true;
+        }
+
+        public int InsertHotel(Hotel hotel)
+        {
+            string strInsert = $"insert into Hotel (Nome, IdEndereco, DataCadastro, Valor) values (@Nome, {_enderecoRepository.InsertEndereco(hotel.Endereco)}, @DataCadastro, @Valor);" +
+                $" select cast(scope_identity() as int)";
+
+            var db = new SqlConnection(_conn);
+
+            return (int)db.ExecuteScalar(strInsert, hotel);
+        }
+
+        public Hotel GetHotelId(int id)
+        {
+            string strSelect = $"select Id, Nome, IdEndereco, DataCadastro, Valor from Hotel where Id = {id}";
+
+            var db = new SqlConnection(_conn);
+
+            IDataReader dr = db.ExecuteReader(strSelect);
+
+            Hotel hotel = new();
+
+            while (dr.Read())
+            {
+                hotel.Id = (int)dr["Id"];
+                hotel.Nome = (string)dr["Nome"];
+                hotel.Endereco = _enderecoRepository.GetEnderecoId((int)dr["IdEndereco"]);
+                hotel.DataCadastro = (DateTime)dr["DataCadastro"];
+                hotel.Valor = (decimal)dr["Valor"];
+            }
+
+            return hotel;
+        }
+
+        public void UpdateHotel(Hotel hotel)
+        {
+            string strUpdate = "update Hotel set Nome = @Nome, Valor = @Valor where Id = @Id";
+
+            var db = new SqlConnection(_conn);
+
+            db.Execute(strUpdate, hotel);
         }
     }
 }

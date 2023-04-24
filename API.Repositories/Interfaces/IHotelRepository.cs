@@ -9,7 +9,10 @@ namespace API.Repositories.Interfaces
 {
     public interface IHotelRepository
     {
-        public bool Insert(Hotel hotel);
-        public List<Hotel> GetAll();
+        bool Insert(Hotel hotel);
+        List<Hotel> GetAll();
+        int InsertHotel(Hotel hotel);
+        Hotel GetHotelId(int id);
+        void UpdateHotel(Hotel hotel);
     }
 }

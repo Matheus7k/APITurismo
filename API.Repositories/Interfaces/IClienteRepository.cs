@@ -13,5 +13,6 @@ namespace API.Repositories.Interfaces
         public List<Cliente> GetAll();
         public int InsertCliente(Cliente cliente);
         public Cliente GetClienteId(int id);
+        public void UpdateCliente(Cliente cliente);
     }
 }

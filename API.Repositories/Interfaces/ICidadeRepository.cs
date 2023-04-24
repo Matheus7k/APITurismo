@@ -11,5 +11,8 @@ namespace API.Repositories.Interfaces
     {
         bool Insert(Cidade cidade);
         List<Cidade> GetAll();
+        int InsertCidade(Cidade cidade);
+        Cidade GetCidadeId(int id);
+        void UpdateCidade(Cidade cidade);
     }
 }

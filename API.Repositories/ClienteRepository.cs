@@ -30,7 +30,7 @@ namespace API.Repositories
             {
                 Cliente cliente = new();
 
-                cliente.Id = 0;
+                cliente.Id = (int)dr["Id"];
                 cliente.Nome = (string)dr["Nome"];
                 cliente.Telefone = (string)dr["Telefone"];
                 cliente.Endereco = _enderecoRepository.GetEnderecoId((int)dr["IdEndereco"]);
@@ -44,7 +44,24 @@ namespace API.Repositories
 
         public Cliente GetClienteId(int id)
         {
-            throw new NotImplementedException();
+            string strSelect = $"select Id, Nome, Telefone, IdEndereco, DataCadastro from Cliente where Id = {id}";
+
+            var db = new SqlConnection(_conn);
+
+            IDataReader dr = db.ExecuteReader(strSelect);
+
+            Cliente cliente = new();
+
+            while (dr.Read())
+            {
+                cliente.Id = (int)dr["Id"];
+                cliente.Nome = (string)dr["Nome"];
+                cliente.Telefone = (string)dr["Telefone"];
+                cliente.Endereco = _enderecoRepository.GetEnderecoId((int)dr["IdEndereco"]);
+                cliente.DataCadastro = (DateTime)dr["DataCadastro"];
+            }
+
+            return cliente;
         }
 
         public bool Insert(Cliente cliente)
@@ -64,7 +81,20 @@ namespace API.Repositories
 
         public int InsertCliente(Cliente cliente)
         {
-            throw new NotImplementedException();
+            string strInsert = $"insert into Cliente (Nome, Telefone, IdEndereco, DataCadastro) values (@Nome, @Telefone, {_enderecoRepository.InsertEndereco(cliente.Endereco)}, @DataCadastro); select cast(scope_identity() as int)";
+
+            var db = new SqlConnection(_conn);
+
+            return (int)db.ExecuteScalar(strInsert, cliente);
+        }
+
+        public void UpdateCliente(Cliente cliente)
+        {
+            string strUpdate = "update Cliente set Nome = @Nome, Telefone = @Telefone where Id = @Id";
+
+            var db = new SqlConnection(_conn);
+
+            db.Execute(strUpdate, cliente);
         }
     }
 }
