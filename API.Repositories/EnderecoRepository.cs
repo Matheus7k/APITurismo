@@ -33,31 +33,14 @@ namespace API.Repositories
         {
             List<Endereco> listaEnderecos = new();
 
-            var db = new SqlConnection(_conn);
+            var db = new SqlConnection(_conn);            
 
-            db.Open();
-
-            IDataReader dr = db.ExecuteReader(Endereco.GETALL);
-
-            while (dr.Read())
+            var enderecos = db.Query<Endereco, Cidade, Endereco>(Endereco.GETALL, (endereco, cidade) =>
             {
-                Endereco endereco = new Endereco();
-
-                endereco.Id = (int)dr["Id"];
-                endereco.Logradouro = (string)dr["Logradouro"];
-                endereco.Numero = (int)dr["Numero"];
-                endereco.Bairro = (string)dr["Bairro"];
-                endereco.CEP = (string)dr["CEP"];
-                endereco.Complemento = (string)dr["Complemento"];
-                endereco.Cidade = _cidadeRepository.GetCidadeId((int)dr["IdCidade"]);
-                endereco.DataCadastro = (DateTime)dr["DataCadastro"];
-
-                listaEnderecos.Add(endereco);
-            }
-
-            db.Close();
-
-            return listaEnderecos;
+                endereco.Cidade = cidade;
+                return endereco;
+            });
+            return (List<Endereco>)enderecos;
         }
 
         public int InsertEndereco(Endereco endereco)
@@ -76,23 +59,12 @@ namespace API.Repositories
 
             string strSelect = $"select Id, Logradouro, Numero, Bairro, CEP, Complemento, IdCidade, DataCadastro from Endereco where Id = {id}";
 
-            IDataReader dr = db.ExecuteReader(strSelect);
-
-            Endereco endereco = new();
-
-            while (dr.Read())
+            var endereco = db.Query<Endereco, Cidade, Endereco>(strSelect, (endereco, cidade) =>
             {
-                endereco.Id = (int)dr["Id"];
-                endereco.Logradouro = (string)dr["Logradouro"];
-                endereco.Numero = (int)dr["Numero"];
-                endereco.Bairro = (string)dr["Bairro"];
-                endereco.CEP = (string)dr["CEP"];
-                endereco.Complemento = (string)dr["Complemento"];
-                endereco.Cidade = _cidadeRepository.GetCidadeId((int)dr["IdCidade"]);
-                endereco.DataCadastro = (DateTime)dr["DataCadastro"];
-            }
-
-            return endereco;
+                endereco.Cidade = cidade;
+                return endereco;
+            });
+            return (Endereco)endereco;
         }
 
         public void UpdateEndereco(Endereco endereco)

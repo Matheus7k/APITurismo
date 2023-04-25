@@ -49,6 +49,7 @@ namespace API.Repositories
 
             var db = new SqlConnection(_conn);
 
+            /*
             IDataReader dr = db.ExecuteReader(strGetCidadeId);
 
             Cidade cidade = new();
@@ -61,6 +62,11 @@ namespace API.Repositories
             }
 
             return cidade;
+            */
+
+            var cidade = db.Query<Cidade>(strGetCidadeId);
+
+            return (Cidade)cidade;
         }
 
         public void UpdateCidade(Cidade cidade)

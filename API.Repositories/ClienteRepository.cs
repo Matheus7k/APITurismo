@@ -18,28 +18,15 @@ namespace API.Repositories
 
         public List<Cliente> GetAll()
         {
-            var db = new SqlConnection(_conn);
+            var db = new SqlConnection(_conn);            
 
-            db.Open();
-
-            IDataReader dr = db.ExecuteReader(Cliente.GETALL);
-
-            List<Cliente> clientes = new();
-
-            while (dr.Read())
+            var clientes = db.Query<Cliente, Endereco,Cidade, Cliente>(Cliente.GETALL, (cliente, endereco,cidade) =>
             {
-                Cliente cliente = new();
-
-                cliente.Id = (int)dr["Id"];
-                cliente.Nome = (string)dr["Nome"];
-                cliente.Telefone = (string)dr["Telefone"];
-                cliente.Endereco = _enderecoRepository.GetEnderecoId((int)dr["IdEndereco"]);
-                cliente.DataCadastro = (DateTime)dr["DataCadastro"];
-
-                clientes.Add(cliente);
-            }
-
-            return clientes;
+                cliente.Endereco = endereco;
+                cliente.Endereco.Cidade = cidade;
+                return cliente;
+            });
+            return (List<Cliente>)clientes;
         }
 
         public Cliente GetClienteId(int id)
@@ -48,20 +35,14 @@ namespace API.Repositories
 
             var db = new SqlConnection(_conn);
 
-            IDataReader dr = db.ExecuteReader(strSelect);
-
-            Cliente cliente = new();
-
-            while (dr.Read())
+            var cliente = db.Query<Cliente, Endereco, Cidade, Cliente>(strSelect, (cliente, endereco, cidade) =>
             {
-                cliente.Id = (int)dr["Id"];
-                cliente.Nome = (string)dr["Nome"];
-                cliente.Telefone = (string)dr["Telefone"];
-                cliente.Endereco = _enderecoRepository.GetEnderecoId((int)dr["IdEndereco"]);
-                cliente.DataCadastro = (DateTime)dr["DataCadastro"];
-            }
+                cliente.Endereco = endereco;
+                cliente.Endereco.Cidade = cidade;
+                return cliente;
+            });
 
-            return cliente;
+            return (Cliente)cliente;
         }
 
         public bool Insert(Cliente cliente)
